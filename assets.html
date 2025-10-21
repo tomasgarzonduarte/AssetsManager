@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Assets | AssetsManager</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#4F46E5',
+              secondary: '#10B981',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .asset-card {
+        transition: all 0.2s ease-in-out;
+      }
+      .asset-card:hover {
+        transform: scale(1.02);
+      }
+      .status-active {
+        background-color: #D1FAE5;
+        color: #065F46;
+      }
+      .status-sold {
+        background-color: #FEE2E2;
+        color: #B91C1C;
+      }
+    </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <i data-feather="shield" class="text-primary h-8 w-8"></i>
+            <span class="ml-2 text-xl font-bold text-gray-900">AssetsManager</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Dashboard
+            </a>
+            <a href="#" class="border-primary text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Assets
+            </a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Reports
+            </a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Taxes
+            </a>
+          </div>
+        </div>
+        <div class="-mr-2 flex items-center sm:hidden">
+          <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary">
+            <span class="sr-only">Open main menu</span>
+            <i data-feather="menu" class="block h-6 w-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold text-gray-900">My Assets</h1>
+        <a href="add-asset.html" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+          <i data-feather="plus" class="mr-2 h-4 w-4"></i> Add Asset
+        </a>
+      </div>
+
+      <!-- Asset Filters -->
+      <div class="mb-6 bg-white p-4 rounded-lg shadow">
+        <div class="flex flex-wrap items-center gap-4">
+          <div>
+            <label for="asset-type" class="sr-only">Asset Type</label>
+            <select id="asset-type" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+              <option value="all">All Types</option>
+              <option value="real-estate">Real Estate</option>
+              <option value="vehicle">Vehicle</option>
+              <option value="equipment">Equipment</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="status" class="sr-only">Status</label>
+            <select id="status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+              <option value="all">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="sold">Sold</option>
+            </select>
+          </div>
+          <div>
+            <label for="sort" class="sr-only">Sort By</label>
+            <select id="sort" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+              <option value="date-desc">Newest First</option>
+              <option value="date-asc">Oldest First</option>
+              <option value="value-desc">Highest Value</option>
+              <option value="value-asc">Lowest Value</option>
+            </select>
+          </div>
+          <div class="flex-1">
+            <label for="search" class="sr-only">Search</label>
+            <div class="relative rounded-md shadow-sm">
+              <input type="text" id="search" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" placeholder="Search assets...">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i data-feather="search" class="h-5 w-5 text-gray-400"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  <!-- Asset List -->
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="assets-container">
+    <!-- Assets will be loaded here dynamically -->
+    <div class="animate-pulse flex space-x-4">
+      <div class="rounded-full bg-gray-200 h-12 w-12"></div>
+      <div class="flex-1 space-y-4 py-1">
+        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div class="space-y-2">
+          <div class="h-4 bg-gray-200 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+        </div>
+      </div>
+    </div>
+    <div class="animate-pulse flex space-x-4">
+      <div class="rounded-full bg-gray-200 h-12 w-12"></div>
+      <div class="flex-1 space-y-4 py-1">
+        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div class="space-y-2">
+          <div class="h-4 bg-gray-200 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+        </div>
+      </div>
+    </div>
+    <div class="animate-pulse flex space-x-4">
+      <div class="rounded-full bg-gray-200 h-12 w-12"></div>
+      <div class="flex-1 space-y-4 py-1">
+        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div class="space-y-2">
+          <div class="h-4 bg-gray-200 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Pagination -->
+      <div class="mt-8 flex items-center justify-between">
+        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+          <div>
+            <p class="text-sm text-gray-700">
+              Showing <span class="font-medium">1</span> to <span class="font-medium">4</span> of <span class="font-medium">12</span> assets
+            </p>
+          </div>
+          <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+              <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span class="sr-only">Previous</span>
+                <i data-feather="chevron-left" class="h-5 w-5"></i>
+              </a>
+              <a href="#" aria-current="page" class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                1
+              </a>
+              <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                2
+              </a>
+              <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                3
+              </a>
+              <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span class="sr-only">Next</span>
+                <i data-feather="chevron-right" class="h-5 w-5"></i>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Asset Modal -->
+  <div id="edit-modal" class="fixed inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+        <div>
+          <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Edit Asset</h3>
+          <div class="mt-2">
+            <div class="mb-4">
+              <label for="edit-title" class="block text-sm font-medium text-gray-700">Title</label>
+              <input type="text" id="edit-title" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            
+            <div class="mb-4">
+              <label for="edit-value" class="block text-sm font-medium text-gray-700">Value ($)</label>
+              <input type="number" id="edit-value" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            
+            <div class="mb-4">
+              <label for="edit-location" class="block text-sm font-medium text-gray-700">Location</label>
+              <input type="text" id="edit-location" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            
+            <div class="mb-4">
+              <label for="edit-income" class="block text-sm font-medium text-gray-700">Monthly Income ($)</label>
+              <input type="number" id="edit-income" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            
+            <div class="mb-4">
+              <label for="edit-depreciation" class="block text-sm font-medium text-gray-700">Depreciation (%)</label>
+              <input type="number" step="0.1" id="edit-depreciation" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            
+            <div class="mb-4">
+              <label for="edit-tax-rate" class="block text-sm font-medium text-gray-700">Tax Rate (%)</label>
+              <input type="number" step="0.1" id="edit-tax-rate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            
+            <div class="mb-4">
+              <label for="edit-status" class="block text-sm font-medium text-gray-700">Status</label>
+              <select id="edit-status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                <option value="active">Active</option>
+                <option value="sold">Sold</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+          <button type="button" id="save-changes-btn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:col-start-2 sm:text-sm">
+            Save changes
+          </button>
+          <button type="button" id="cancel-edit-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:mt-0 sm:col-start-1 sm:text-sm">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import assetDB from './db.js';
+    import './components/asset-card.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Initialize database
+      await assetDB.init();
+      
+      // Load assets
+      await loadAssets();
+
+      // Set up event listeners
+      setupEventListeners();
+    });
+
+    async function loadAssets() {
+      const assetsContainer = document.getElementById('assets-container');
+      assetsContainer.innerHTML = '';
+      
+      const assets = await assetDB.getAllAssets();
+      
+      // If no assets, add sample data
+      if (assets.length === 0) {
+        const sampleAssets = [
+          {
+            title: 'Beachfront Villa',
+            value: '850,000',
+            location: 'Miami, Florida',
+            status: 'active',
+            income: '4200',
+            depreciation: '2.1',
+            taxRate: '1.2',
+            image: 'http://static.photos/estate/640x360/1'
+          },
+          {
+            title: 'Luxury Sedan',
+            value: '125,000',
+            location: '2022 Model',
+            status: 'active',
+            income: '1800',
+            depreciation: '15.2',
+            taxRate: '4.5',
+            image: 'http://static.photos/automotive/640x360/2'
+          },
+          {
+            title: 'Downtown Office',
+            value: '2,400,000',
+            location: 'New York, NY',
+            status: 'active',
+            income: '12500',
+            depreciation: '1.8',
+            taxRate: '3.8',
+            image: 'http://static.photos/office/640x360/3'
+          },
+          {
+            title: 'Mountain Cabin',
+            value: '350,000',
+            location: 'Aspen, Colorado',
+            status: 'sold',
+            income: '',
+            depreciation: '1.5',
+            taxRate: '2.3',
+            image: 'http://static.photos/estate/640x360/4'
+          }
+        ];
+
+        for (const asset of sampleAssets) {
+          await assetDB.addAsset(asset);
+        }
+        
+        // Reload assets after adding samples
+        return loadAssets();
+      }
+      // Get filter values
+      const typeFilter = document.getElementById('asset-type').value;
+      const statusFilter = document.getElementById('status').value;
+      const searchQuery = document.getElementById('search').value.toLowerCase();
+
+      // Filter assets
+      const filteredAssets = assets.filter(asset => {
+        const matchesType = typeFilter === 'all' || 
+                          (typeFilter === 'real-estate' && asset.title.toLowerCase().includes('house')) ||
+                          (typeFilter === 'real-estate' && asset.title.toLowerCase().includes('apartment')) ||
+                          (typeFilter === 'real-estate' && asset.title.toLowerCase().includes('villa')) ||
+                          (typeFilter === 'real-estate' && asset.title.toLowerCase().includes('office')) ||
+                          (typeFilter === 'vehicle' && (asset.title.toLowerCase().includes('car') || asset.title.toLowerCase().includes('sedan'))) ||
+                          (typeFilter === 'equipment' && asset.title.toLowerCase().includes('equipment')) ||
+                          (typeFilter === 'other' && 
+                            !asset.title.toLowerCase().includes('house') && 
+                            !asset.title.toLowerCase().includes('apartment') && 
+                            !asset.title.toLowerCase().includes('villa') && 
+                            !asset.title.toLowerCase().includes('office') && 
+                            !asset.title.toLowerCase().includes('car') && 
+                            !asset.title.toLowerCase().includes('sedan') && 
+                            !asset.title.toLowerCase().includes('equipment'));
+        
+        const matchesStatus = statusFilter === 'all' || asset.status === statusFilter;
+        const matchesSearch = searchQuery === '' || 
+                            asset.title.toLowerCase().includes(searchQuery) || 
+                            asset.location.toLowerCase().includes(searchQuery) ||
+                            asset.value.toLowerCase().includes(searchQuery);
+
+        return matchesType && matchesStatus && matchesSearch;
+      });
+
+      // Display filtered assets
+      filteredAssets.forEach(asset => {
+        const assetCard = document.createElement('asset-card');
+        assetCard.setAttribute('asset-id', asset.id);
+        assetCard.setAttribute('title', asset.title);
+        assetCard.setAttribute('value', asset.value);
+        assetCard.setAttribute('location', asset.location);
+        assetCard.setAttribute('status', asset.status);
+        assetCard.setAttribute('income', asset.income);
+        assetCard.setAttribute('depreciation', asset.depreciation);
+        assetCard.setAttribute('tax-rate', asset.taxRate);
+        assetCard.setAttribute('image', asset.image);
+        assetsContainer.appendChild(assetCard);
+      });
+feather.replace();
+    }
+    function setupEventListeners() {
+      // Add filter event listeners
+      document.getElementById('asset-type').addEventListener('change', loadAssets);
+      document.getElementById('status').addEventListener('change', loadAssets);
+      document.getElementById('search').addEventListener('input', loadAssets);
+      
+let currentEditId = null;
+      const editModal = document.getElementById('edit-modal');
+      // Handle edit asset events
+      document.addEventListener('edit-asset', (e) => {
+        e.preventDefault();
+        currentEditId = e.detail.id;
+        
+        // Populate modal with asset data
+        document.getElementById('edit-title').value = e.detail.title;
+        document.getElementById('edit-value').value = e.detail.value.replace(/,/g, '');
+        document.getElementById('edit-location').value = e.detail.location;
+        document.getElementById('edit-income').value = e.detail.income || '';
+        document.getElementById('edit-depreciation').value = e.detail.depreciation;
+        document.getElementById('edit-tax-rate').value = e.detail.taxRate;
+        document.getElementById('edit-status').value = e.detail.status;
+        
+        // Show modal
+        editModal.classList.remove('hidden');
+        editModal.style.display = 'block';
+      });
+// Handle save changes
+      document.getElementById('save-changes-btn').addEventListener('click', async () => {
+        const updates = {
+          title: document.getElementById('edit-title').value,
+          value: Number(document.getElementById('edit-value').value).toLocaleString('en-US'),
+          location: document.getElementById('edit-location').value,
+          income: document.getElementById('edit-income').value,
+          depreciation: document.getElementById('edit-depreciation').value,
+          taxRate: document.getElementById('edit-tax-rate').value,
+          status: document.getElementById('edit-status').value
+        };
+        
+        await assetDB.updateAsset(currentEditId, updates);
+        await loadAssets();
+        editModal.classList.add('hidden');
+        editModal.style.display = 'none';
+});
+      // Handle cancel edit
+      document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+        editModal.classList.add('hidden');
+        editModal.style.display = 'none';
+      });
+// Sort functionality
+      document.getElementById('sort').addEventListener('change', async (e) => {
+        const sortValue = e.target.value;
+        const assets = await assetDB.getAllAssets();
+        
+        let sortedAssets = [...assets];
+        switch(sortValue) {
+          case 'date-asc':
+            sortedAssets.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            break;
+          case 'date-desc':
+            sortedAssets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            break;
+          case 'value-asc':
+            sortedAssets.sort((a, b) => parseInt(a.value.replace(/,/g, '')) - parseInt(b.value.replace(/,/g, '')));
+            break;
+          case 'value-desc':
+            sortedAssets.sort((a, b) => parseInt(b.value.replace(/,/g, '')) - parseInt(a.value.replace(/,/g, '')));
+            break;
+        }
+        
+        const assetsContainer = document.getElementById('assets-container');
+        assetsContainer.innerHTML = '';
+        
+        sortedAssets.forEach(asset => {
+          const assetCard = document.createElement('asset-card');
+          assetCard.setAttribute('asset-id', asset.id);
+          assetCard.setAttribute('title', asset.title);
+          assetCard.setAttribute('value', asset.value);
+          assetCard.setAttribute('location', asset.location);
+          assetCard.setAttribute('status', asset.status);
+          assetCard.setAttribute('income', asset.income);
+          assetCard.setAttribute('depreciation', asset.depreciation);
+          assetCard.setAttribute('tax-rate', asset.taxRate);
+          assetCard.setAttribute('image', asset.image);
+          assetsContainer.appendChild(assetCard);
+        });
+      });
+
+      // Handle delete asset events
+document.addEventListener('delete-asset', async (e) => {
+        if (confirm('Are you sure you want to permanently delete this asset?')) {
+          try {
+            await assetDB.deleteAsset(e.detail.id);
+            await loadAssets();
+            // Show success notification
+            alert('Asset deleted successfully!');
+          } catch (error) {
+            console.error('Error deleting asset:', error);
+            alert('Failed to delete asset. Please try again.');
+          }
+        }
+      });
+}
+  </script>
+</body>
+</html>
