@@ -1,8 +1,12 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const cors = require('cors'); // Make sure this line is here
 
 const app = express();
-app.use(express.json()); // Middleware to parse JSON
+
+// Set up middleware
+app.use(cors()); // This line MUST come before your endpoints
+app.use(express.json());
 
 const port = 3000;
 const uri = "mongodb://127.0.0.1:27017";
@@ -13,13 +17,11 @@ async function run() {
     await client.connect();
     console.log("Successfully connected to MongoDB!");
 
-    // Use the lowercase name here
-    const database = client.db("assetsmanager"); 
+    const database = client.db("assetsManager"); 
     const assetsCollection = database.collection("assets");
 
     // === API ENDPOINTS ===
 
-    // GET all assets
     app.get('/assets', async (req, res) => {
       try {
         const assets = await assetsCollection.find({}).toArray();
@@ -29,16 +31,19 @@ async function run() {
       }
     });
 
-    // POST a new asset
+// POST a new asset
     app.post('/assets', async (req, res) => {
+    console.log('POST /assets endpoint was hit!');
+
       try {
         const newAsset = req.body;
         const result = await assetsCollection.insertOne(newAsset);
-        res.status(201).json(result); // 201 means "Created"
+        res.status(201).json(result);
       } catch (err) {
+        console.error("Server error:", err); // I've added a label here for clarity
         res.status(500).send("Error creating asset");
       }
-    });
+});
 
     app.listen(port, () => {
       console.log(`Server is running at http://localhost:${port}`);
