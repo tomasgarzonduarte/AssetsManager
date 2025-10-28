@@ -1,11 +1,9 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
-const cors = require('cors'); // Make sure this line is here
+const { MongoClient, ObjectId } = require('mongodb'); // Ensure ObjectId is imported
+const cors = require('cors');
 
 const app = express();
-
-// Set up middleware
-app.use(cors()); // This line MUST come before your endpoints
+app.use(cors());
 app.use(express.json());
 
 const port = 3000;
@@ -17,11 +15,10 @@ async function run() {
     await client.connect();
     console.log("Successfully connected to MongoDB!");
 
-    const database = client.db("assetsManager"); 
+    const database = client.db("assetsManager"); // Correct case
     const assetsCollection = database.collection("assets");
 
-    // === API ENDPOINTS ===
-
+    // GET all assets
     app.get('/assets', async (req, res) => {
       try {
         const assets = await assetsCollection.find({}).toArray();
@@ -31,19 +28,35 @@ async function run() {
       }
     });
 
-// POST a new asset
+    // POST a new asset
     app.post('/assets', async (req, res) => {
-    console.log('POST /assets endpoint was hit!');
-
       try {
         const newAsset = req.body;
         const result = await assetsCollection.insertOne(newAsset);
         res.status(201).json(result);
       } catch (err) {
-        console.error("Server error:", err); // I've added a label here for clarity
         res.status(500).send("Error creating asset");
       }
-});
+    });
+
+    // DELETE an asset by its ID
+    app.delete('/assets/:id', async (req, res) => {
+      try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) }; // Use ObjectId
+        
+        const result = await assetsCollection.deleteOne(query);
+
+        if (result.deletedCount === 1) {
+          res.status(200).json({ message: "Asset deleted successfully" });
+        } else {
+          res.status(404).send("Asset not found");
+        }
+      } catch (err) {
+        console.error("Error deleting asset:", err);
+        res.status(500).send("Error deleting asset");
+      }
+    });
 
     app.listen(port, () => {
       console.log(`Server is running at http://localhost:${port}`);
