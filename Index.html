@@ -3,122 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Assets | AssetsManager</title>
+    <title>AssetFortune Guardian</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#4F46E5',
+              secondary: '#10B981',
+            }
+          }
+        }
+      }
+    </script>
     <style>
-      .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
-      .modal-content { background-color: #fefefe; margin: auto; padding: 2rem; border-radius: 0.5rem; position: relative; width: 90%; max-width: 500px; }
-      .modal-close { color: #aaa; position: absolute; top: 0.5rem; right: 1rem; font-size: 28px; font-weight: bold; cursor: pointer; }
-      .status-active { background-color: #D1FAE5; color: #065F46; }
+      .dashboard-card {
+        transition: all 0.3s ease;
+      }
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+      .asset-card {
+        transition: all 0.2s ease-in-out;
+      }
+      .asset-card:hover {
+        transform: scale(1.02);
+      }
     </style>
 </head>
 <body class="bg-gray-50">
+  <!-- Navigation -->
   <nav class="bg-white shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="flex justify-between h-16"><div class="flex"><div class="flex-shrink-0 flex items-center"><i data-feather="shield" class="text-indigo-600 h-8 w-8"></i><span class="ml-2 text-xl font-bold text-gray-900">AssetsManager</span></div><div class="hidden sm:ml-6 sm:flex sm:space-x-8"><a href="Index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Dashboard</a><a href="#" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Assets</a></div></div></div></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <i data-feather="shield" class="text-primary h-8 w-8"></i>
+            <span class="ml-2 text-xl font-bold text-gray-900">AssetsManager</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="#" class="border-primary text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Dashboard
+            </a>
+            <a href="assets.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Assets
+            </a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Reports
+            </a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Taxes
+            </a>
+          </div>
+        </div>
+        <div class="-mr-2 flex items-center sm:hidden">
+          <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary">
+            <span class="sr-only">Open main menu</span>
+            <i data-feather="menu" class="block h-6 w-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </nav>
 
+  <!-- Main Content -->
   <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-semibold text-gray-900">My Assets</h1>
-        <a href="add-asset.html" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><i data-feather="plus" class="mr-2 h-4 w-4"></i> Add Asset</a>
+      <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+      <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Total Value Card -->
+        <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <i data-feather="dollar-sign" class="h-6 w-6 text-primary"></i>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Total Asset Value</dt>
+                  <dd>
+                    <div class="text-lg font-medium text-gray-900">$1,240,500</div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <span class="font-medium text-green-700">+5.4%</span> from last month
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Income Card -->
+        <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <i data-feather="trending-up" class="h-6 w-6 text-primary"></i>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Monthly Income</dt>
+                  <dd>
+                    <div class="text-lg font-medium text-gray-900">$12,450</div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <span class="font-medium text-green-700">+2.1%</span> from last month
+            </div>
+          </div>
+        </div>
+
+        <!-- Annual Taxes Card -->
+        <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <i data-feather="file-text" class="h-6 w-6 text-primary"></i>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Annual Taxes</dt>
+                  <dd>
+                    <div class="text-lg font-medium text-gray-900">$34,200</div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <span class="font-medium text-red-600">+8.3%</span> from last year
+            </div>
+          </div>
+        </div>
+
+        <!-- Depreciation Rate Card -->
+        <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <i data-feather="bar-chart-2" class="h-6 w-6 text-primary"></i>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Avg Depreciation</dt>
+                  <dd>
+                    <div class="text-lg font-medium text-gray-900">3.2%</div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <span class="font-medium text-yellow-600">+0.4%</span> vs inflation
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="assets-container"></div>
+
+      <!-- Asset Performance Charts -->
+      <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <!-- Income vs Tax Chart -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">Income vs Tax Expense</h2>
+          <div class="relative h-80">
+            <canvas id="incomeTaxChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Asset Value Composition -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">Asset Value Composition</h2>
+          <div class="relative h-80">
+            <canvas id="assetPieChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Assets -->
+      <div class="mt-8">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Recent Assets</h2>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- House Asset -->
+          <div class="bg-white shadow rounded-lg overflow-hidden asset-card">
+            <img class="w-full h-48 object-cover" src="http://static.photos/estate/640x360/1" alt="Beach House">
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <h3 class="font-medium text-gray-900">Beachfront Villa</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Active
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">Miami, Florida</p>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Value</p>
+                  <p class="text-sm text-gray-900">$850,000</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Monthly Income</p>
+                  <p class="text-sm text-gray-900">$4,200</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Tax Rate</p>
+                  <p class="text-sm text-gray-900">1.2%</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Depreciation</p>
+                  <p class="text-sm text-gray-900">2.1%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vehicle Asset -->
+          <div class="bg-white shadow rounded-lg overflow-hidden asset-card">
+            <img class="w-full h-48 object-cover" src="http://static.photos/automotive/640x360/2" alt="Luxury Car">
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <h3 class="font-medium text-gray-900">Luxury Sedan</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Active
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">2022 Model</p>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Value</p>
+                  <p class="text-sm text-gray-900">$125,000</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Monthly Income</p>
+                  <p class="text-sm text-gray-900">$1,800</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Tax Rate</p>
+                  <p class="text-sm text-gray-900">4.5%</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Depreciation</p>
+                  <p class="text-sm text-gray-900">15.2%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Commercial Property -->
+          <div class="bg-white shadow rounded-lg overflow-hidden asset-card">
+            <img class="w-full h-48 object-cover" src="http://static.photos/office/640x360/3" alt="Office Building">
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <h3 class="font-medium text-gray-900">Downtown Office</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Active
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">New York, NY</p>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Value</p>
+                  <p class="text-sm text-gray-900">$2,400,000</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Monthly Income</p>
+                  <p class="text-sm text-gray-900">$12,500</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Tax Rate</p>
+                  <p class="text-sm text-gray-900">3.8%</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Depreciation</p>
+                  <p class="text-sm text-gray-900">1.8%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="mt-8">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <a href="add-asset.html" class="bg-white shadow rounded-lg p-4 flex items-center justify-center hover:bg-gray-50">
+            <i data-feather="plus" class="h-5 w-5 text-primary mr-2"></i>
+            <span>Add New Asset</span>
+          </a>
+          <button class="bg-white shadow rounded-lg p-4 flex items-center justify-center hover:bg-gray-50">
+            <i data-feather="dollar-sign" class="h-5 w-5 text-primary mr-2"></i>
+            <span>Record Income</span>
+          </button>
+          <button class="bg-white shadow rounded-lg p-4 flex items-center justify-center hover:bg-gray-50">
+            <i data-feather="file-text" class="h-5 w-5 text-primary mr-2"></i>
+            <span>Generate Tax Report</span>
+          </button>
+          <button class="bg-white shadow rounded-lg p-4 flex items-center justify-center hover:bg-gray-50">
+            <i data-feather="bar-chart-2" class="h-5 w-5 text-primary mr-2"></i>
+            <span>View Analytics</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="details-modal" class="modal"><div class="modal-content"><span id="modal-close-btn" class="modal-close">&times;</span><div id="modal-body"></div></div></div>
-
-  <script>feather.replace();</script>
-  <script type="module" src="db.js"></script>
-  <script type="module">
-    import { getAllAssets, deleteAsset } from './db.js';
-
-    const detailsModal = document.getElementById('details-modal');
-    const modalBody = document.getElementById('modal-body');
-    const closeModalBtn = document.getElementById('modal-close-btn');
-    const assetsContainer = document.getElementById('assets-container');
-    let assets = [];
-
-    function showDetailsModal(asset) {
-      modalBody.innerHTML = '';
-      const title = document.createElement('h2');
-      title.className = 'text-2xl font-bold text-gray-900 mb-4';
-      title.textContent = asset.name;
-      modalBody.appendChild(title);
-      for (const [key, value] of Object.entries(asset)) {
-        if (key === '_id' || key === 'name') continue;
-        const detailLine = document.createElement('p');
-        detailLine.className = 'text-gray-700 mb-1';
-        detailLine.innerHTML = `<strong class="font-medium text-gray-500 capitalize">${key.replace(/([A-Z])/g, ' $1')}:</strong> ${value}`;
-        modalBody.appendChild(detailLine);
-      }
-      detailsModal.style.display = 'flex';
-    }
-
-    async function renderAssets() {
-      assets = await getAllAssets();
-      assetsContainer.innerHTML = '';
-
-      if (assets.length === 0) {
-        assetsContainer.innerHTML = '<p class="col-span-3 text-center text-gray-500">No assets found.</p>';
-        return;
-      }
-
-      assets.forEach(asset => {
-        const formattedValue = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(asset.value || 0);
-        const assetCard = document.createElement('div');
-        assetCard.className = 'bg-white shadow rounded-lg overflow-hidden';
-        assetCard.dataset.assetId = asset._id;
-        assetCard.innerHTML = `
-          <img class="w-full h-48 object-cover cursor-pointer view-details-btn" src="${asset.imageUrl || 'https://via.placeholder.com/400x200'}" alt="${asset.name}">
-          <div class="p-6">
-            <div class="flex items-center justify-between">
-              <h3 class="font-medium text-gray-900 cursor-pointer view-details-btn">${asset.name}</h3>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium status-active">${asset.status}</span>
-            </div>
-            <p class="text-sm text-gray-500 mt-2">${asset.location}</p>
-            <p class="text-lg font-bold text-indigo-600 mt-4">${formattedValue}</p>
-            <div class="mt-4 pt-4 border-t border-gray-200 flex justify-end space-x-3">
-              <button title="Edit Asset" class="text-gray-400 hover:text-indigo-600 edit-btn"><i data-feather="edit-2" class="w-5 h-5 pointer-events-none"></i></button>
-              <button title="Delete Asset" class="text-gray-400 hover:text-red-600 delete-btn"><i data-feather="trash-2" class="w-5 h-5 pointer-events-none"></i></button>
-            </div>
-          </div>
-        `;
-        assetsContainer.appendChild(assetCard);
-      });
-      feather.replace();
-    }
-
-    assetsContainer.addEventListener('click', async (event) => {
-      const card = event.target.closest('[data-asset-id]');
-      if (!card) return;
-
-      const assetId = card.dataset.assetId;
-      const clickedAsset = assets.find(a => a._id === assetId);
-      if (!clickedAsset) return;
-
-      if (event.target.closest('.view-details-btn')) {
-        showDetailsModal(clickedAsset);
-      } else if (event.target.closest('.edit-btn')) {
-        alert('Edit functionality coming soon for asset: ' + clickedAsset.name);
-      } else if (event.target.closest('.delete-btn')) {
-        if (confirm(`Are you sure you want to delete "${clickedAsset.name}"?`)) {
-          const success = await deleteAsset(assetId);
-          if (success) {
-            renderAssets();
-          } else {
-            alert('Failed to delete asset.');
+  <script>
+    feather.replace();
+    
+    // Chart for Income vs Tax
+    const incomeTaxCtx = document.getElementById('incomeTaxChart').getContext('2d');
+    const incomeTaxChart = new Chart(incomeTaxCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [
+          {
+            label: 'Income',
+            data: [12500, 13200, 14200, 14800, 15600, 16300, 17400],
+            backgroundColor: 'rgba(79, 70, 229, 0.6)',
+            borderColor: 'rgba(79, 70, 229, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Taxes',
+            data: [3500, 3800, 4200, 4500, 4800, 5000, 5200],
+            backgroundColor: 'rgba(16, 185, 129, 0.6)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
           }
         }
       }
     });
 
-    closeModalBtn.onclick = () => { detailsModal.style.display = 'none'; };
-    window.onclick = (event) => { if (event.target == detailsModal) detailsModal.style.display = 'none'; };
-
-    document.addEventListener('DOMContentLoaded', renderAssets);
+    // Pie chart for asset composition
+    const assetPieCtx = document.getElementById('assetPieChart').getContext('2d');
+    const assetPieChart = new Chart(assetPieCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Real Estate', 'Vehicles', 'Equipment', 'Other'],
+        datasets: [{
+          data: [65, 15, 12, 8],
+          backgroundColor: [
+            'rgba(79, 70, 229, 0.7)',
+            'rgba(16, 185, 129, 0.7)',
+            'rgba(251, 191, 36, 0.7)',
+            'rgba(239, 68, 68, 0.7)'
+          ],
+          borderColor: [
+            'rgba(79, 70, 229, 1)',
+            'rgba(16, 185, 129, 1)',
+            'rgba(251, 191, 36, 1)',
+            'rgba(239, 68, 68, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+          }
+        }
+      }
+    });
   </script>
 </body>
 </html>
