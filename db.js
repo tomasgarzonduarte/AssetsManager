@@ -3,22 +3,26 @@ const API_URL = 'http://localhost:3000';
 async function getAllAssets() {
   try {
     const response = await fetch(`${API_URL}/assets`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      // This helps catch server errors like 404 or 500
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
     console.error("Failed to fetch assets:", error);
-    return [];
+    return []; // **THE FIX: Always return an empty array on error.**
   }
 }
 
-async function addAsset(asset) {
+async function addAsset(formData) {
   try {
     const response = await fetch(`${API_URL}/assets`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(asset),
+      body: formData,
     });
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
     console.error("Failed to add asset:", error);
@@ -31,7 +35,9 @@ async function deleteAsset(id) {
     const response = await fetch(`${API_URL}/assets/${id}`, {
       method: 'DELETE',
     });
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     return true; // Success
   } catch (error) {
     console.error("Failed to delete asset:", error);

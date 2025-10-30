@@ -129,14 +129,14 @@
   <script type="module" src="db.js"></script>
 
   <script type="module">
-    import { getAllAssets } from './db.js';
-
+    // 1. Import the deleteAsset function
+    import { getAllAssets, deleteAsset } from './db.js';
+  
     const detailsModal = document.getElementById('details-modal');
     const modalBody = document.getElementById('modal-body');
     const closeModalBtn = document.getElementById('modal-close-btn');
     const assetsContainer = document.getElementById('assets-container');
-
-    let assets = []; // Store assets globally to access them in click events
+    let assets = [];
 
     function showDetailsModal(asset) {
       modalBody.innerHTML = ''; // Clear previous content
@@ -200,21 +200,31 @@
       feather.replace();
     }
 
-    assetsContainer.addEventListener('click', (event) => {
-      const assetId = event.target.closest('[data-asset-id]')?.dataset.assetId;
-      if (!assetId) return;
+    assetsContainer.addEventListener('click', async (event) => {
+    const card = event.target.closest('[data-asset-id]');
+    if (!card) return;
 
-      const clickedAsset = assets.find(a => a._id === assetId);
-      if (!clickedAsset) return;
+    const assetId = card.dataset.assetId;
+    const clickedAsset = assets.find(a => a._id === assetId);
+    if (!clickedAsset) return;
 
-      if (event.target.closest('.view-details-btn')) {
-        showDetailsModal(clickedAsset);
-      } else if (event.target.closest('.edit-btn')) {
-        alert('Edit functionality coming soon for asset: ' + clickedAsset.name);
-      } else if (event.target.closest('.delete-btn')) {
-        alert('Delete functionality coming soon for asset: ' + clickedAsset.name);
+    if (event.target.closest('.view-details-btn')) {
+      showDetailsModal(clickedAsset);
+    } else if (event.target.closest('.edit-btn')) {
+      alert('Edit functionality coming soon for asset: ' + clickedAsset.name);
+    } else if (event.target.closest('.delete-btn')) {
+      // Show confirmation pop-up
+      if (confirm(`Are you sure you want to delete "${clickedAsset.name}"?`)) {
+        const success = await deleteAsset(assetId);
+        if (success) {
+          // Refresh the list after a successful deletion
+          renderAssets();
+        } else {
+          alert('Failed to delete asset.');
+        }
       }
-    });
+    }
+  });
 
     closeModalBtn.onclick = () => { detailsModal.style.display = 'none'; };
     window.onclick = (event) => {

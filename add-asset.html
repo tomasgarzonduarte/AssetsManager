@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Asset - AssetFortune Guardian</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <title>Add Asset - AssetsManager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script>
@@ -20,7 +19,7 @@
       }
     </script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-100">
   <nav class="bg-white shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
@@ -30,35 +29,22 @@
             <span class="ml-2 text-xl font-bold text-gray-900">AssetsManager</span>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <a href="Index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Dashboard
-            </a>
-            <a href="assets.html" class="border-primary text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Assets
-            </a>
-            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Reports
-            </a>
-            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Taxes
-            </a>
+            <a href="Index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Dashboard</a>
+            <a href="assets.html" class="border-primary text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Assets</a>
           </div>
-        </div>
-        <div class="-mr-2 flex items-center sm:hidden">
-          <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary">
-            <i data-feather="menu" class="block h-6 w-6"></i>
-          </button>
         </div>
       </div>
     </div>
   </nav>
 
-  <div class="py-6">
+  <div class="py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-white shadow sm:rounded-lg">
-        <div class="px-4 py-5 sm:p-6">
-          <h1 class="text-2xl font-semibold text-gray-900">Add New Asset</h1>
-          <p class="mt-1 text-sm text-gray-600">Fill in the details of your new asset below.</p>
+      <div class="bg-white shadow-lg rounded-lg border-t-4 border-primary">
+        <div class="px-4 py-5 sm:p-8">
+          <div class="pb-5 border-b border-gray-200">
+            <h1 class="text-2xl font-bold text-gray-800">Add New Asset</h1>
+            <p class="mt-1 text-sm text-gray-600">Fill in the details of your new asset below.</p>
+          </div>
 
           <form id="add-asset-form" class="mt-6 space-y-6">
             <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -69,28 +55,28 @@
               </div>
 
               <div class="sm:col-span-3">
-                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                <label for="category" class="block text-sm font-medium text-gray-700 text-center">Category</label>
                 <select id="category" name="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
-                  <option>residential</option>
-                  <option>commercial</option>
-                  <option>vehicle</option>
-                  <option>other</option>
+                  <option>Real Estate</option>
+                  <option>Vehicle</option>
+                  <option>Financial Asset</option>
+                  <option>Other</option>
                 </select>
               </div>
 
-              <div class="sm:col-span-4">
+              <div class="sm:col-span-6">
                 <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
                 <input type="text" name="location" id="location" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
               </div>
 
-              <div class="sm:col-span-2">
+              <div class="sm:col-span-2 hidden">
                 <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                <input type="text" name="status" id="status" value="active" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                <input type="text" name="status" id="status" value="active" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
               </div>
 
               <div class="sm:col-span-6">
-                <label for="imageUrl" class="block text-sm font-medium text-gray-700">Image URL</label>
-                <input type="text" name="imageUrl" id="imageUrl" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                <label for="imageUpload" class="block text-sm font-medium text-gray-700">Image</label>
+                <input type="file" name="image" id="imageUpload" accept="image/*,application/pdf" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-primary hover:file:bg-indigo-100"/>
               </div>
               
               <div class="sm:col-span-2">
@@ -115,14 +101,10 @@
               
             </div>
 
-            <div class="pt-5">
+            <div class="pt-5 mt-4 border-t border-gray-200">
               <div class="flex justify-end">
-                <a href="assets.html" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                  Cancel
-                </a>
-                <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                  Save Asset
-                </button>
+                <a href="assets.html" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</a>
+                <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 transition-colors duration-200">Save Asset</button>
               </div>
             </div>
           </form>
@@ -132,7 +114,6 @@
   </div>
 
   <script>
-    // Initialize Feather Icons
     feather.replace();
   </script>
 
@@ -144,26 +125,18 @@
     const addAssetForm = document.getElementById('add-asset-form');
     
     addAssetForm.addEventListener('submit', async (event) => {
-      event.preventDefault(); // Prevent the default browser refresh
+      event.preventDefault();
       
+      // FormData is specifically designed to handle file uploads
+      // along with other text data.
       const formData = new FormData(addAssetForm);
-      const newAsset = {
-        category: formData.get('category'),
-        name: formData.get('name'),
-        status: formData.get('status'),
-        location: formData.get('location'),
-        imageUrl: formData.get('imageUrl'),
-        currency: 'USD',
-        value: parseFloat(formData.get('value')),
-        monthlyIncome: parseFloat(formData.get('monthlyIncome')),
-        taxRate: parseFloat(formData.get('taxRate')),
-        depreciationRate: parseFloat(formData.get('depreciationRate'))
-      };
       
-      const result = await addAsset(newAsset);
+      // We manually add the hardcoded status to the FormData object.
+      formData.append('status', 'active');
+      
+      const result = await addAsset(formData);
       
       if (result) {
-        // Redirect to the assets page after a successful save
         window.location.href = 'assets.html';
       } else {
         alert('Failed to add asset. Please try again.');
